@@ -58,13 +58,20 @@ public class puzzle_game_controller : MonoBehaviour
         }
     }
 
-    void initialize()//각 생명주기 시작 할 때마다 맵 초기화 & n개의 플레이어 생성
+    public void initialize()//각 생명주기 시작 할 때마다 맵 초기화 & n개의 플레이어 생성
     {
-        if(listAllControllStates.Count != 0)
-        {
-            GameObject goTmp = Instantiate(fakePlayer, vecInit, fakePlayer.transform.rotation);
-            goTmp.transform.parent = gameObject.transform;
-        }
+        
+        GameObject goTmp = Instantiate(fakePlayer, vecInit, fakePlayer.transform.rotation);
+        goTmp.transform.parent = gameObject.transform;
+        
+        player.transform.position = vecInit;
+        currentTime = 0f;
+        frame = -1;
+
+        listAllControllStates.Add(new List<controll_state>(pc.GetComponent<player_controller>().listControllState));
+        pc.GetComponent<player_controller>().listControllState.Clear();
+
+
 
         for (int i = 0; i < listAllControllStates.Count; i++)
         {
@@ -76,20 +83,15 @@ public class puzzle_game_controller : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        
+
+
         frame++;
         currentTime += Time.deltaTime;
 
         if(currentTime > cycle)
         {
-            player.transform.position = vecInit;
-            currentTime = 0f;
-            frame = -1;
-
-            listAllControllStates.Add(new List<controll_state>(pc.GetComponent<player_controller>().listControllState));
-            pc.GetComponent<player_controller>().listControllState.Clear();
-
-            Debug.Log(listAllControllStates[0].Count);
-
+            
 
 
             initialize();
@@ -98,6 +100,10 @@ public class puzzle_game_controller : MonoBehaviour
         {
             for (int i = 0; i < listAllControllStates.Count; i++)
             {
+                if(listAllControllStates[i].Count < frame + 1)
+                {
+                    continue;
+                }
                 pc.GetComponent<player_controller>().moveHorizontal(transform.GetChild(i).gameObject,
                     listAllControllStates[i][frame].direction,
                     pc.GetComponent<player_controller>().moveHorizontalSpeed,
@@ -116,5 +122,25 @@ public class puzzle_game_controller : MonoBehaviour
 
         }
         
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.N))
+        {
+            initialize();
+        }
+        if(Input.GetKeyUp(KeyCode.R))
+        {
+            if ((pc.GetComponent<player_controller>().view + 1) != player_controller.View.enumEnd)
+            {
+                pc.GetComponent<player_controller>().view++;
+            }
+            else
+            {
+                pc.GetComponent<player_controller>().view = 0;
+            }
+           
+        }
     }
 }

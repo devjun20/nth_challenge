@@ -11,6 +11,11 @@ public class player_controller : MonoBehaviour
 
     public List<controll_state> listControllState = new List<controll_state>();//현재(n번째) 움직임을 실시간으로 기록하는 변수
 
+    public enum View
+    {
+        player, world, enumEnd
+    }
+    public View view = View.player;
 
     public float moveHorizontalSpeed = 500.0f;
     public float jumpPower = 20.0f;
@@ -29,7 +34,23 @@ public class player_controller : MonoBehaviour
         {
             jump(goPlayer, jumpPower, true);
         }
-        follow(goPlayerEffector, goPlayer, 0.1f);
+        if(view == View.player)
+        {
+            follow(goPlayerEffector, goPlayer, 0.1f);
+        }else if(view == View.world)
+        {
+            GameObject goTmp = new GameObject();
+
+            goTmp.transform.position = goPlayerEffector.transform.position;
+            goTmp.transform.position = new Vector3(
+                goPlayer.transform.position.x,
+                goPlayer.transform.position.y,
+                goPlayer.transform.position.z - 20
+                );
+
+            follow(goPlayerEffector, goTmp, 0.1f);
+        }
+        Debug.Log(view);
     }
 
     void follow(GameObject go1, GameObject go2, float delay)
