@@ -5,6 +5,10 @@ using UnityEngine;
 public class player_controller : MonoBehaviour
 {
     public GameObject goPlayer;
+
+    public GameObject goPlayerEffector;
+
+
     public float moveHorizontalSpeed = 500.0f;
     public float jumpPower = 20.0f;
 
@@ -12,13 +16,20 @@ public class player_controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
         jump(goPlayer, jumpPower);
+        follow(goPlayerEffector, goPlayer, 0.1f);
+    }
+
+    void follow(GameObject go1, GameObject go2, float delay)
+    {
+        Vector3 velo = Vector3.zero;
+        go1.transform.position = Vector3.SmoothDamp(go1.transform.position, go2.transform.position, ref velo, delay);
+        //go1.transform.position = go2.transform.position;
     }
     private void FixedUpdate()
     {
@@ -31,6 +42,7 @@ public class player_controller : MonoBehaviour
         Vector3 velocity = Vector3.zero;
         if (Input.GetAxisRaw("Horizontal") < 0)
         {
+            Debug.Log("left");
             velocity = Vector3.left;
             go.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
         }
