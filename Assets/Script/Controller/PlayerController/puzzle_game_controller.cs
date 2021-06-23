@@ -57,8 +57,17 @@ public class puzzle_game_controller : MonoBehaviour
         {
             for (int i = 0; i < listAllControllStates.Count; i++)
             {
-                if(frame >= 0)
-                    transform.GetChild(i).transform.position = listAllControllStates[i][frame].vec;
+                pc.GetComponent<player_controller>().moveHorizontal(transform.GetChild(i).gameObject,
+                    listAllControllStates[i][frame].direction,
+                    pc.GetComponent<player_controller>().moveHorizontalSpeed,
+                    false);
+
+                if(listAllControllStates[i][frame].jump)
+                {
+                    pc.GetComponent<player_controller>().jump(transform.GetChild(i).gameObject,
+                        pc.GetComponent<player_controller>().jumpPower,
+                        false);
+                }
 
             }
 

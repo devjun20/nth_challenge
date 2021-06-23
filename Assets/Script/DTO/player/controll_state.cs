@@ -5,5 +5,6 @@ using UnityEngine;
 public class controll_state
 {
     public float currentTime;
-    public Vector3 vec;
+    public int direction = 0;
+    public bool jump = false;
 }

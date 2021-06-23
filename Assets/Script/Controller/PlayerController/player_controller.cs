@@ -24,7 +24,11 @@ public class player_controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        jump(goPlayer, jumpPower);
+        bool jumpState = goPlayer.transform.GetChild(0).GetComponent<isJump>().jumpState;
+        if (Input.GetButtonDown("Jump") && !jumpState)
+        {
+            jump(goPlayer, jumpPower, true);
+        }
         follow(goPlayerEffector, goPlayer, 0.1f);
     }
 
@@ -40,20 +44,28 @@ public class player_controller : MonoBehaviour
     {
 
         currentTime += Time.deltaTime;
-
-        moveHorizontal(goPlayer, moveHorizontalSpeed, true);
+        int dir = 0;
+        if (Input.GetAxisRaw("Horizontal") < 0)
+        {
+            dir = -1;
+        }
+        else if (Input.GetAxisRaw("Horizontal") > 0)
+        {
+            dir = 1;
+        }
+        moveHorizontal(goPlayer, dir, moveHorizontalSpeed, true);
     }
 
 
-    void moveHorizontal(GameObject go, float speed, bool isPlayer)
+    public void moveHorizontal(GameObject go, int dir, float speed, bool isPlayer)
     {
         Vector3 velocity = Vector3.zero;
-        if (Input.GetAxisRaw("Horizontal") < 0)
+        
+        if(dir == -1)
         {
             velocity = Vector3.left;
             go.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
-        }
-        else if (Input.GetAxisRaw("Horizontal") > 0)
+        }else if(dir == 1)
         {
             velocity = Vector3.right;
             go.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
@@ -64,7 +76,7 @@ public class player_controller : MonoBehaviour
 
             controll_state cs = new controll_state();
             cs.currentTime = currentTime;
-            cs.vec = goPlayer.transform.position;
+            cs.direction = dir;
             listControllState.Add(cs);
         }
 
@@ -72,16 +84,18 @@ public class player_controller : MonoBehaviour
         velocity.y = go.GetComponent<Rigidbody>().velocity.y;
         go.GetComponent<Rigidbody>().velocity = velocity;
     }
-    void jump(GameObject go, float power)
+    public void jump(GameObject go, float power, bool isPlayer)
     {
-        bool jumpState = go.transform.GetChild(0).GetComponent<isJump>().jumpState;
-        if (Input.GetButtonDown("Jump") && !jumpState)
+
+        if (isPlayer)
         {
             go.transform.GetChild(0).GetComponent<isJump>().jumpState = true;
-            go.GetComponent<Rigidbody>().velocity = Vector2.zero;
-            Vector2 jumpVelocity = new Vector2(0, power);
-            go.GetComponent<Rigidbody>().velocity = jumpVelocity;
+            listControllState[listControllState.Count - 1].jump = true;
         }
+        go.GetComponent<Rigidbody>().velocity = Vector2.zero;
+        Vector2 jumpVelocity = new Vector2(0, power);
+        go.GetComponent<Rigidbody>().velocity = jumpVelocity;
+        
     }
     
     
