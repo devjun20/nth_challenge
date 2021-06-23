@@ -13,7 +13,7 @@ public class player_controller : MonoBehaviour
 
     public enum View
     {
-        player, world, enumEnd
+        player, wide,  world, enumEnd
     }
     public View view = View.player;
 
@@ -37,7 +37,8 @@ public class player_controller : MonoBehaviour
         if(view == View.player)
         {
             follow(goPlayerEffector, goPlayer, 0.1f);
-        }else if(view == View.world)
+        }
+        else if (view == View.wide)
         {
             GameObject goTmp = new GameObject();
 
@@ -46,6 +47,19 @@ public class player_controller : MonoBehaviour
                 goPlayer.transform.position.x,
                 goPlayer.transform.position.y,
                 goPlayer.transform.position.z - 20
+                );
+
+            follow(goPlayerEffector, goTmp, 0.1f);
+        }
+        else if (view == View.world)
+        {
+            GameObject goTmp = new GameObject();
+
+            goTmp.transform.position = goPlayerEffector.transform.position;
+            goTmp.transform.position = new Vector3(
+                goPlayer.transform.position.x,
+                goPlayer.transform.position.y,
+                goPlayer.transform.position.z - 40
                 );
 
             follow(goPlayerEffector, goTmp, 0.1f);

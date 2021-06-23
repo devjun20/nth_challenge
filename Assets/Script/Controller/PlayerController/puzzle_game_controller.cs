@@ -54,7 +54,8 @@ public class puzzle_game_controller : MonoBehaviour
             initObject[i].transform.position = initObjectPosition[i];
             initObject[i].transform.rotation = initObjectRotation[i];
             initObject[i].transform.localScale = initObjectLocalScale[i];
-
+            initObject[i].GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            initObject[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
     }
 
@@ -65,6 +66,11 @@ public class puzzle_game_controller : MonoBehaviour
         goTmp.transform.parent = gameObject.transform;
         
         player.transform.position = vecInit;
+
+        player.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+
         currentTime = 0f;
         frame = -1;
 
@@ -76,6 +82,10 @@ public class puzzle_game_controller : MonoBehaviour
         for (int i = 0; i < listAllControllStates.Count; i++)
         {
             transform.GetChild(i).transform.position = vecInit;
+
+            transform.GetChild(i).GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            transform.GetChild(i).GetComponent<Rigidbody>().velocity = Vector3.zero;
+
         }
         InvokeRepeating("initializeObject", 0f, 0.1f);
     }

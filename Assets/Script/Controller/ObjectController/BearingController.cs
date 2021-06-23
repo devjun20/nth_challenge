@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BearingController : MonoBehaviour
 {
+    private Vector3 initPosition;
+
     // Start is called before the first frame update
     void Start()
     {
