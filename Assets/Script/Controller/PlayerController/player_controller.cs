@@ -9,6 +9,9 @@ public class player_controller : MonoBehaviour
     public GameObject goPlayerEffector;
 
 
+    public List<controll_state> listControllState = new List<controll_state>();//현재(n번째) 움직임을 실시간으로 기록하는 변수
+
+
     public float moveHorizontalSpeed = 500.0f;
     public float jumpPower = 20.0f;
 
@@ -31,18 +34,22 @@ public class player_controller : MonoBehaviour
         go1.transform.position = Vector3.SmoothDamp(go1.transform.position, go2.transform.position, ref velo, delay);
         //go1.transform.position = go2.transform.position;
     }
+
+    float currentTime = 0f;
     private void FixedUpdate()
     {
-        moveHorizontal(goPlayer, moveHorizontalSpeed);
+
+        currentTime += Time.deltaTime;
+
+        moveHorizontal(goPlayer, moveHorizontalSpeed, true);
     }
 
 
-    void moveHorizontal(GameObject go, float speed)
+    void moveHorizontal(GameObject go, float speed, bool isPlayer)
     {
         Vector3 velocity = Vector3.zero;
         if (Input.GetAxisRaw("Horizontal") < 0)
         {
-            Debug.Log("left");
             velocity = Vector3.left;
             go.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
         }
@@ -50,6 +57,15 @@ public class player_controller : MonoBehaviour
         {
             velocity = Vector3.right;
             go.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        }
+
+        if(isPlayer)
+        {
+
+            controll_state cs = new controll_state();
+            cs.currentTime = currentTime;
+            cs.vec = goPlayer.transform.position;
+            listControllState.Add(cs);
         }
 
         velocity = velocity * Time.deltaTime * speed;
