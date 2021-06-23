@@ -248,7 +248,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3105365364710975484, guid: b5a9e4c63b38843608c1bb543032b176, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.92
+      value: 6.93
       objectReference: {fileID: 0}
     - target: {fileID: 3105365364710975484, guid: b5a9e4c63b38843608c1bb543032b176, type: 3}
       propertyPath: m_LocalPosition.z
@@ -911,7 +911,7 @@ PrefabInstance:
       objectReference: {fileID: 18920806}
     - target: {fileID: 5331964485288259113, guid: df9c9e39bd23b4d8d85931937bb13817, type: 3}
       propertyPath: cycle
-      value: 10
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 5331964485288259113, guid: df9c9e39bd23b4d8d85931937bb13817, type: 3}
       propertyPath: player
@@ -921,6 +921,14 @@ PrefabInstance:
       propertyPath: fakePlayer
       value: 
       objectReference: {fileID: 6434478223065138977, guid: ff44dbadf039b408285b36a6cda0707b, type: 3}
+    - target: {fileID: 5331964485288259113, guid: df9c9e39bd23b4d8d85931937bb13817, type: 3}
+      propertyPath: initObject.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5331964485288259113, guid: df9c9e39bd23b4d8d85931937bb13817, type: 3}
+      propertyPath: initObject.Array.data[0]
+      value: 
+      objectReference: {fileID: 1648470166}
     - target: {fileID: 5331964485288259114, guid: df9c9e39bd23b4d8d85931937bb13817, type: 3}
       propertyPath: m_Name
       value: puzzleGameController

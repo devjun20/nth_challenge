@@ -11,23 +11,66 @@ public class puzzle_game_controller : MonoBehaviour
 
     List<List<controll_state>> listAllControllStates = new List<List<controll_state>>();//전체(1 ~ n-1) 움직임 저장하는 변수.
 
+
+    private List<Vector3> initObjectPosition = new List<Vector3>();
+    private List<Quaternion> initObjectRotation = new List<Quaternion>();
+    private List<Vector3> initObjectLocalScale = new List<Vector3>();
+
+    public GameObject[] initObject;
+
     Vector3 vecInit;
 
     private float currentTime;
     int frame = -1;//frame * 0.2 = currentTime.
+    
+
+    int invokeCount = 0;
 
     void Start()
     {
         currentTime = 0f;
         vecInit = player.transform.position;
+
+        for (int i = 0; i < initObject.Length; i++)
+        {
+            initObjectPosition.Add(initObject[i].transform.position);
+            initObjectRotation.Add(initObject[i].transform.rotation);
+            initObjectLocalScale.Add(initObject[i].transform.localScale);
+
+        }
+    }
+
+    void initializeObject()//사이클이 돌 때마다 움직이는 오브젝트들 원위
+    {
+        invokeCount++;
+        if (invokeCount > 10)
+        {
+            CancelInvoke("initializeObject");
+            invokeCount = 0;
+        }
+
+        for (int i = 0; i < initObject.Length; i++)
+        {
+            initObject[i].transform.position = initObjectPosition[i];
+            initObject[i].transform.rotation = initObjectRotation[i];
+            initObject[i].transform.localScale = initObjectLocalScale[i];
+
+        }
     }
 
     void initialize()//각 생명주기 시작 할 때마다 맵 초기화 & n개의 플레이어 생성
     {
+        if(listAllControllStates.Count != 0)
+        {
+            GameObject goTmp = Instantiate(fakePlayer, vecInit, fakePlayer.transform.rotation);
+            goTmp.transform.parent = gameObject.transform;
+        }
+
         for (int i = 0; i < listAllControllStates.Count; i++)
         {
             transform.GetChild(i).transform.position = vecInit;
         }
+        InvokeRepeating("initializeObject", 0f, 0.1f);
     }
 
     // Update is called once per frame
@@ -48,8 +91,6 @@ public class puzzle_game_controller : MonoBehaviour
             Debug.Log(listAllControllStates[0].Count);
 
 
-            GameObject goTmp = Instantiate(fakePlayer, vecInit, fakePlayer.transform.rotation);
-            goTmp.transform.parent = gameObject.transform;
 
             initialize();
         }
